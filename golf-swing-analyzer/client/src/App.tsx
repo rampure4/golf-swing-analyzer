@@ -4,6 +4,7 @@ import VideoList from './components/videoList';
 import VideoGallery from './VideoGallery';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import NavBar from './NavBar';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
 
