@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const NavBar = () => {
   return (
     <div
-      className="d-flex flex-column p-4 bg-dark text-black"
+      className="d-flex flex-column p-4 bg-dark text-white"
       style={{
         width: "240px",
         height: "100vh",
