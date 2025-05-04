@@ -7,12 +7,11 @@ export interface FileResponse {
 }
 
 export const uploadVideo = async (file: File): Promise<FileResponse> => {
-  const formData = new FormData();
-  formData.append('video', file, file.name);
+  const blob = new Blob([file], { type: file.type }); // ✅ ensure it's a Blob
 
   const res = await request
     .post(`${getApiServer()}/upload`)
-    .send(formData)
+    .attach('video', blob as any, file.name) // ✅ workaround type mismatch
     .withCredentials();
 
   return res.body;
