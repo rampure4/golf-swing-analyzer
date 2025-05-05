@@ -7,11 +7,12 @@ export interface FileResponse {
 }
 
 export const uploadVideo = async (file: File): Promise<FileResponse> => {
-  const blob = new Blob([file], { type: file.type }); // ✅ ensure it's a Blob
+  const formData = new FormData();
+  formData.append('video', file); // 'video' must match multer field name
 
   const res = await request
     .post(`${getApiServer()}/upload`)
-    .attach('video', blob as any, file.name) // ✅ workaround type mismatch
+    .send(formData) // ✅ correct for browser FormData
     .withCredentials();
 
   return res.body;
