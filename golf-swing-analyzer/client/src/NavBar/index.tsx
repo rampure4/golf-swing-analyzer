@@ -1,6 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const NavBar = () => {
+interface NavBarProps {
+  onLogout: () => void;
+}
+
+const NavBar: React.FC<NavBarProps> = ({ onLogout }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    onLogout(); // tells App to update state
+    navigate("/"); // redirect to login
+  };
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   return (
     <div
       className="d-flex flex-column p-4 bg-dark text-white"
@@ -14,14 +28,12 @@ const NavBar = () => {
       }}
     >
       <div className="mb-4">
-        <h4 className="fw-bold">
-          GalleryApp
-        </h4>
+        <h4 className="fw-bold">GalleryApp</h4>
       </div>
 
       <ul className="nav nav-pills flex-column gap-3">
         <li className="nav-item">
-          <Link to="/" className="nav-link text-white bg-transparent px-0">
+          <Link to="/videos" className="nav-link text-white bg-transparent px-0">
             Feed
           </Link>
         </li>
@@ -30,19 +42,13 @@ const NavBar = () => {
             Upload
           </Link>
         </li>
-        <li className="nav-item">
-          <Link to="/upload" className="nav-link text-white bg-transparent px-0">
-            Messages
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/upload" className="nav-link text-white bg-transparent px-0">
-            Your Posts
-          </Link>
-        </li>
       </ul>
+
       <div className="mt-auto pt-3 border-top border-secondary">
-        <h6>User Name</h6>
+        <h6>{user.email || "User"}</h6>
+        <button className="btn btn-sm btn-danger mt-2" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
     </div>
   );

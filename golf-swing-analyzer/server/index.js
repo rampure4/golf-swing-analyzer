@@ -1,12 +1,21 @@
-const express = require('express');
-const cors = require('cors');
-const multer = require('multer');
-require('dotenv').config();
-const logger = require('./middleware/logger');
-const uploadRoutes = require('./routes/uploadRoutes');
+// index.js
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { logger } from './middleware/logger.js';
+import { uploadRoutes } from './routes/uploadRoutes.js';
+import { authRoutes } from './routes/auth.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+dotenv.config();
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// ✅ Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
@@ -17,14 +26,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', uploadRoutes);
+
+app.use('/api', authRoutes());
+app.use('/', uploadRoutes());
 
 app.get('/', (req, res) => {
-  return res.json("from backend side");
+  res.json("from backend side");
 });
 
 const PORT = process.env.PORT || 5001;
-
 app.listen(PORT, () => {
   console.log(`✅ Backend running on http://localhost:${PORT}`);
 });
